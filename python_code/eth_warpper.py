@@ -8,7 +8,6 @@ import jsonrpc
 import time
 from ethereum.abi import ContractTranslator
 from ethereum.utils import mk_contract_address
-from bike.parsing.fastparserast import Node
 
 
 global_wait_for_confirm = True
