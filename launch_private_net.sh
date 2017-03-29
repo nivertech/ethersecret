@@ -28,6 +28,9 @@ mkdir -p ${DATADIR}
 geth --datadir ${DATADIR} init ${GENESIS_FILE}
 
 geth --datadir ${DATADIR} \
+    --nodiscover \
+    --identity "Chain${NETWORK_ID}" \
+    --maxpeers 15 \
     --networkid ${NETWORK_ID} \
     --rpc \
     --rpcport 8545 \
