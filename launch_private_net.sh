@@ -34,7 +34,7 @@ geth --datadir ${DATADIR} \
     --rpcaddr 0.0.0.0 \
     --rpccorsdomain "*" \
     --rpcapi "eth,web3" \
-    --verbosity \
+    --verbosity 6 \
     console
 
     # use this to listen on all IPs from VM:
