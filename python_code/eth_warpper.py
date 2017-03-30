@@ -449,6 +449,11 @@ global_wait_for_confirm = True
 #sd
 
 
+# local:
+#contract_addr = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+# On the private consortium net:
+CONTRACT_ADDR = "1bb84a0cb8eef3f004c022451745c22bb4e57c90"
+
 def deploy( key ):
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
     #contract_data_ethash = "12323"    
@@ -456,7 +461,7 @@ def deploy( key ):
 
 def can_read( key, index ):
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
-    contract_data_ethash = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+    contract_data_ethash = CONTRACT_ADDR
     
     retVal = call_const_function(key, 0, contract_data_ethash, abi_ethash, "getPremission", [index])
     
@@ -466,20 +471,20 @@ def can_read( key, index ):
 def set_prem( key, index, reader, start, end ):
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
     
-    contract_data_ethash = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+    contract_data_ethash = CONTRACT_ADDR
     call_function(key, 0, contract_data_ethash, abi_ethash, "setPremission", [start,end,reader,index])
 
 
 def newSecret( key, secret ):
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
     
-    contract_data_ethash = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+    contract_data_ethash = CONTRACT_ADDR    
     call_function(key, 0, contract_data_ethash, abi_ethash, "newSecret", [secret])
 
 def getEncData(key, secret_index):
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
     
-    contract_data_ethash = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+    contract_data_ethash = CONTRACT_ADDR    
     retVal = call_const_function(key, 0, contract_data_ethash, abi_ethash, "secrets", [secret_index])
     secret_int = retVal[4]
     secret_bytes = h2b("%064x" % secret_int) 
@@ -489,7 +494,7 @@ def getNumSecrets( key ):
     num = 0
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
     
-    contract_data_ethash = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+    contract_data_ethash = CONTRACT_ADDR    
     
     while(True):
         retVal = call_const_function(key, 0, contract_data_ethash, abi_ethash, "secrets", [num])

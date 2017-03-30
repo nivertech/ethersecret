@@ -210,7 +210,7 @@ secret = h2b("45746865722050726976616379205465616d") + h2b("00") * 14
 #secret = h2b("476176696e206973207361746f736869") + h2b("00") * 16
 
 #secret = h2b("c0dec0defacefeed") * 4
-secret_index = 22
+secret_index = 0
 
 
 print "secret index " + str(secret_index)
