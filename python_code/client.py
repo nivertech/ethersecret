@@ -18,7 +18,7 @@ from eth_warpper import *
 import xmlrpclib
 
 is_localhost = False
-if is_localhost then:
+if(is_localhost):
     sever1 = xmlrpclib.ServerProxy('http://localhost:8001')
     sever2 = xmlrpclib.ServerProxy('http://localhost:8002')
     sever3 = xmlrpclib.ServerProxy('http://localhost:8003')
