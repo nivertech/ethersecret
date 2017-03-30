@@ -17,9 +17,15 @@ from eth_warpper import *
 
 import xmlrpclib
 
-sever1 = xmlrpclib.ServerProxy('http://localhost:8001')
-sever2 = xmlrpclib.ServerProxy('http://localhost:8002')
-sever3 = xmlrpclib.ServerProxy('http://localhost:8003')
+is_localhost = False
+if is_localhost then:
+    sever1 = xmlrpclib.ServerProxy('http://localhost:8001')
+    sever2 = xmlrpclib.ServerProxy('http://localhost:8002')
+    sever3 = xmlrpclib.ServerProxy('http://localhost:8003')
+else:
+    sever1 = xmlrpclib.ServerProxy('http://10.101.154.71:8001')
+    sever2 = xmlrpclib.ServerProxy('http://10.79.151.81:8001')
+    sever3 = xmlrpclib.ServerProxy('http://10.65.213.19:8001')
 
 
 def xor( x, y ):
