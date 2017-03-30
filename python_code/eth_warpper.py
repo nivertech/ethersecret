@@ -10,6 +10,7 @@ from ethereum.abi import ContractTranslator
 from ethereum.utils import mk_contract_address
 
 
+
 global_wait_for_confirm = True
 use_ether_scan = False
 use_augor = False
@@ -482,6 +483,21 @@ def getEncData(key, secret_index):
     secret_int = retVal[4]
     secret_bytes = h2b("%064x" % secret_int) 
     return secret_bytes
+
+def getNumSecrets( key ):
+    num = 0
+    (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
+    
+    contract_data_ethash = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
+    
+    while(True):
+        retVal = call_const_function(key, 0, contract_data_ethash, abi_ethash, "secrets", [num])
+        if( len(retVal) <4 ):
+            break
+        num += 1
+        print num
+    return num + 1
+    
 
 
 #deploy( ethereum_key )
