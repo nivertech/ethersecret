@@ -17,7 +17,9 @@ from eth_warpper import *
 
 import xmlrpclib
 
-sever = xmlrpclib.ServerProxy('http://localhost:8000')
+sever1 = xmlrpclib.ServerProxy('http://localhost:8001')
+sever2 = xmlrpclib.ServerProxy('http://localhost:8002')
+sever3 = xmlrpclib.ServerProxy('http://localhost:8003')
 
 
 def xor( x, y ):
@@ -78,6 +80,7 @@ def upload_enc_secret_to_blockchain_and_send_keys_to_nodes( secret, secret_index
     keys2 = CreateNodeKeys( key, rand1, rand2, rand3, 2 )
     keys3 = CreateNodeKeys( key, rand1, rand2, rand3, 3 )
     
+    print "uploading encrypted secret to blockchain"
     newSecret( ethereum_key, enc_secret )
     
     # TODO - send to nodes
@@ -87,9 +90,12 @@ def upload_enc_secret_to_blockchain_and_send_keys_to_nodes( secret, secret_index
     
     #print str(keys1)
     
-    sever.submit_keys( secret_index, keys1, 1 )
-    sever.submit_keys( secret_index, keys2, 2 )
-    sever.submit_keys( secret_index, keys3, 3 )    
+    print "send key share 1 to server 1"
+    sever1.submit_keys( secret_index, keys1, 1 )
+    print "send key share 2 to server 2"    
+    sever2.submit_keys( secret_index, keys2, 2 )
+    print "send key share 3 to server 3"    
+    sever3.submit_keys( secret_index, keys3, 3 )    
 
 def key12( xor_key_rand1, xor_key_rand2, xor_key_rand1_rand2 ):
     key = xor( xor( xor_key_rand1, xor_key_rand2 ), xor_key_rand1_rand2 )
@@ -108,26 +114,36 @@ def key23( xor_key_rand2, xor_key_rand3, xor_key_rand2_rand3 ):
 
 def read_and_decrypt_secret( secret_index, ethereum_key ):
     # 1) read encrypted secret
+    print "read raw encrypted data from blockchain"
     data = getEncData( ethereum_key, secret_index)
     
     # 2) ask for keys and get at least two - TODO
-    keys1 = sever.get_keys(b2h(ethereum_key), secret_index, 1)
-    keys2 = sever.get_keys(b2h(ethereum_key), secret_index, 2)
-    keys3 = sever.get_keys(b2h(ethereum_key), secret_index, 3)
+    print "requesting key share 1 from server 1"
+    keys1 = sever1.get_keys(b2h(ethereum_key), secret_index, 1)
+    print "requesting key share 2 from server 2"    
+    keys2 = sever2.get_keys(b2h(ethereum_key), secret_index, 2)
+    print "requesting key share 3 from server 3"    
+    keys3 = sever3.get_keys(b2h(ethereum_key), secret_index, 3)
     
     if( len(keys1) == 3 ):
+        print "received receive key share 1 from server 1"         
         keys1 = [ h2b(keys1[0]),h2b(keys1[1]),h2b(keys1[2])]
     else:
+        print "didn't received receive key share 1 from server 1"        
         keys1 = None    
 
     if( len(keys2) == 3 ):
+        print "received receive key share 2 from server 2"
         keys2 = [ h2b(keys2[0]),h2b(keys2[1]),h2b(keys2[2])]
     else:
+        print "didn't received receive key share 2 from server 2"                 
         keys2 = None    
 
     if( len(keys3) == 3 ):
+        print "received receive key share 3 from server 3"        
         keys3 = [ h2b(keys3[0]),h2b(keys3[1]),h2b(keys3[2])]
     else:
+        print "didn't received receive key share 3 from server 3"
         keys3 = None
 
 
@@ -141,7 +157,7 @@ def read_and_decrypt_secret( secret_index, ethereum_key ):
     elif( not (keys2 is None) and not (keys3 is None) ):
         key = key23( keys2[0], keys3[0], keys2[2]) 
     else:
-        print "cannot decrypt"
+        print "cannot decrypt, less than 2 servers sent keys"
         return h2b("00") * 32
     
     return decrypt(data,key)
@@ -184,9 +200,11 @@ print "received data:", data
 
 ethereum_key = utils.sha3("Smart Pool2")
 
+secret = h2b("45746865722050726976616379205465616d") + h2b("00") * 14
+#secret = h2b("476176696e206973207361746f736869") + h2b("00") * 16
 
-secret = h2b("c0dec0defacefeed") * 4
-secret_index = 13
+#secret = h2b("c0dec0defacefeed") * 4
+secret_index = 22
 
 
 print "secret index " + str(secret_index)
@@ -194,13 +212,15 @@ print "secret index " + str(secret_index)
 ################################################################################
 
 
+
 upload_enc_secret_to_blockchain_and_send_keys_to_nodes( secret, secret_index, ethereum_key )
-print "upload done" 
+ 
 data = read_and_decrypt_secret(secret_index, ethereum_key)
-print b2h(data)
+print "decrytion returned: " + b2h(data)
 
+print "giving read access to 0x6d87462cB31C1217cf1eD61B4FCC37F823c61624 for 3 hours"
 set_prem( ethereum_key, secret_index, "0x6d87462cB31C1217cf1eD61B4FCC37F823c61624", 0, 2490817702 )
-print "set prem"
 
 data = read_and_decrypt_secret(secret_index, ethereum_key)
-print b2h(data)
+print "decrytion returned: " + data
+#print b2h(data)

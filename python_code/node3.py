@@ -24,10 +24,10 @@ def get_keys( ethereum_key_sender, secret_index, node_index ):
     global keys
     address = "0x" + b2h(utils.privtoaddr(ethereum_key_sender))
     if( can_read( h2b(ethereum_key_sender), secret_index ) ):
-        print address + " can read"
+        print address + " authorized to read"
         return (keys[node_index-1])[secret_index]
     
-    print address + " can't read"
+    print address + " not authorized to read"
     
     return []
 
@@ -63,8 +63,8 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
 # Create server
-print "I am server 1"
-server = SimpleXMLRPCServer(("localhost", 8001),
+print "I am server 3"
+server = SimpleXMLRPCServer(("localhost", 8003),
                             requestHandler=RequestHandler)
 server.register_introspection_functions()
 

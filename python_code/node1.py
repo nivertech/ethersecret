@@ -24,10 +24,10 @@ def get_keys( ethereum_key_sender, secret_index, node_index ):
     global keys
     address = "0x" + b2h(utils.privtoaddr(ethereum_key_sender))
     if( can_read( h2b(ethereum_key_sender), secret_index ) ):
-        print address + " can read"
+        print address + " authorized to read"
         return (keys[node_index-1])[secret_index]
     
-    print address + " can't read"
+    print address + " not authorized to read"
     
     return []
 

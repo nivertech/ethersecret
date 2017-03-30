@@ -140,7 +140,7 @@ def make_transaction(src_priv_key, dst_address, value, data):
             return return_value
         
         nonce += 1
-        print str(nonce)
+        #print str(nonce)
     wait_for_confirmation(tx_hash)
     return return_value        
 
@@ -230,7 +230,7 @@ def call_const_function(priv_key, value, contract_hash, contract_abi, function_n
                "data" : "0x" + b2h(call) }
     
     return_value = json_call("eth_call", [params])
-    print return_value
+    #print return_value
     return_value = h2b(return_value[2:])  # remove 0x
     return translator.decode(function_name, return_value)
 
@@ -255,7 +255,8 @@ def wait_for_confirmation(tx_hash):
         params = "0x" + tx_hash
     round = 0
     while(True):
-        print "waiting for confirmation round " + str(round)
+        
+        print "waiting for tx confirmation from blockchain round " + str(round)
         round += 1 
         result = json_call("eth_getTransactionReceipt", [params])
         # print result
@@ -271,7 +272,7 @@ def wait_for_confirmation(tx_hash):
             return result
         time.sleep(10)
         
-        
+    print "confirmation received"
     
 ################################################################################
 
