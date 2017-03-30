@@ -452,7 +452,7 @@ global_wait_for_confirm = True
 # local:
 #contract_addr = "0ee9e66884C1d4b531E3E17e0eb402E861A2aCC2"    
 # On the private consortium net:
-CONTRACT_ADDR = "1bb84a0cb8eef3f004c022451745c22bb4e57c90"
+CONTRACT_ADDR = "aa6cb4c8c222cb3c258aed1a776be0285fa13103"
 
 def deploy( key ):
     (contract_data_ethash, abi_ethash) = get_contract_data("./BankStatements", [])
